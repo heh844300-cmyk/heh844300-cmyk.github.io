@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>你的名字</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ============ 導覽列 ============ -->
+  <nav class="nav">
+    <span class="nav__mark">你的名字</span>
+    <div class="nav__links">
+      <a href="#about">關於</a>
+      <a href="#stack">技能</a>
+      <a href="#work">作品</a>
+      <a href="#contact">聯絡</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ============ Hero 區塊 ============ -->
+    <section class="hero" id="home">
+      <p class="hero__label">你的職稱 / 定位,例如 Backend Engineer</p>
+      <h1 class="hero__title">
+        你好,我是<br>
+        <span class="hero__name">你的名字</span>
+      </h1>
+      <p class="hero__bio">
+        一句話描述你自己。例如:專注於後端系統與資料架構,
+        喜歡把複雜的問題拆解成簡單、可維護的解法。
+      </p>
+      <div class="hero__actions">
+        <a href="#contact" class="btn btn--primary">聯絡我</a>
+        <a href="#work" class="btn btn--ghost">看作品</a>
+      </div>
+    </section>
+
+    <!-- ============ 關於 ============ -->
+    <section class="section" id="about">
+      <h2 class="section__title">關於</h2>
+      <p class="section__text">
+        在這裡寫你的背景介紹:學經歷、專長領域、
+        目前在做什麼、或是你對這個領域的想法。
+        兩三句話就好,保持精簡。
+      </p>
+    </section>
+
+    <!-- ============ 技能 ============ -->
+    <!-- 擴充方式:直接複製一個 .stack__item 並修改內容即可新增項目 -->
+    <section class="section" id="stack">
+      <h2 class="section__title">技能</h2>
+      <ul class="stack">
+        <li class="stack__item">
+          <span class="stack__name">語言</span>
+          <span class="stack__value">JavaScript, Python</span>
+        </li>
+        <li class="stack__item">
+          <span class="stack__name">框架</span>
+          <span class="stack__value">Node.js, React</span>
+        </li>
+        <li class="stack__item">
+          <span class="stack__name">工具</span>
+          <span class="stack__value">Docker, Git</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ============ 作品 ============ -->
+    <!-- 這裡的卡片是用 script.js 裡的資料陣列動態產生的,
+         要新增作品只需要編輯 script.js 裡的 projects 陣列,不用改這裡的 HTML -->
+    <section class="section" id="work">
+      <h2 class="section__title">作品</h2>
+      <div class="projects" id="projectsContainer"></div>
+    </section>
+
+    <!-- ============ 聯絡 ============ -->
+    <section class="section section--contact" id="contact">
+      <h2 class="section__title">聯絡</h2>
+      <p class="section__text">想聊聊合作或交流,歡迎透過以下方式找我。</p>
+      <div class="contact-links">
+        <a href="mailto:you@example.com">you@example.com</a>
+        <a href="https://github.com/yourname" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com/in/yourname" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>&copy; <span id="year"></span> 你的名字</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
