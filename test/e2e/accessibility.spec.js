@@ -59,6 +59,30 @@ test('hash 路由切換後焦點移至新頁主標題', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toBeFocused()
 })
 
+test('桌面導覽可用左右鍵移動焦點', async ({ page }) => {
+  await page.goto('/')
+
+  const links = page.getByRole('navigation', { name: '頁面導覽' }).getByRole('link')
+  await links.nth(0).focus()
+  await page.keyboard.press('ArrowRight')
+  await expect(links.nth(1)).toBeFocused()
+  await page.keyboard.press('ArrowLeft')
+  await expect(links.nth(0)).toBeFocused()
+})
+
+test('時間軸節點可用左右鍵移動焦點並展開目前節點', async ({ page }) => {
+  await page.goto('/#/projects/personal-site/development-record')
+
+  const nodes = page.getByRole('button', { name: /^\d{2}$/ })
+  await nodes.nth(1).focus()
+  await page.keyboard.press('ArrowRight')
+
+  await expect(nodes.nth(2)).toBeFocused()
+  await expect(nodes.nth(2)).toHaveAttribute('aria-expanded', 'true')
+  await page.keyboard.press('ArrowLeft')
+  await expect(nodes.nth(1)).toBeFocused()
+})
+
 test.describe('手機觸控操作', () => {
   test.use({ hasTouch: true, viewport: { width: 390, height: 844 } })
 

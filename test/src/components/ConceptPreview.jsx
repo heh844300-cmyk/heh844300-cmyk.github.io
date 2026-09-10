@@ -196,6 +196,15 @@ function ConceptPreview() {
               className={activeSection === item.id ? 'is-active' : ''}
               aria-current={activeSection === item.id ? 'page' : undefined}
               onClick={() => setMenuOpen(false)}
+              onKeyDown={(event) => {
+                const direction = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0
+                if (!direction) return
+                const links = Array.from(event.currentTarget.parentElement.querySelectorAll('a'))
+                const nextLink = links[links.indexOf(event.currentTarget) + direction]
+                if (!nextLink) return
+                event.preventDefault()
+                nextLink.focus()
+              }}
             >
               <span>{item.label}</span>
               {item.detail}

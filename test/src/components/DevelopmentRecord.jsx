@@ -92,6 +92,17 @@ function DevelopmentRecord() {
                 onClick={() => setActiveStep(index)}
                 onFocus={() => setActiveStep(index)}
                 onMouseEnter={() => setActiveStep(index)}
+                onKeyDown={(event) => {
+                  const direction = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0
+                  if (!direction) return
+                  const nodes = Array.from(
+                    event.currentTarget.closest('.growth-timeline').querySelectorAll('button.growth-timeline__node'),
+                  )
+                  const nextNode = nodes[index + direction]
+                  if (!nextNode) return
+                  event.preventDefault()
+                  nextNode.focus()
+                }}
               >
                 <span>{String(index + 1).padStart(2, '0')}</span>
               </button>
