@@ -34,6 +34,14 @@ export const experienceActs = [
   },
 ]
 
+export const skillActs = [
+  { name: 'React', role: '介面鍊金術', group: 'WEB' },
+  { name: 'Vite', role: '快速鍛造', group: 'WEB' },
+  { name: 'HTML / CSS', role: '網頁結構術', group: 'WEB' },
+  { name: 'JavaScript', role: '互動術式', group: 'CODE' },
+  { name: 'AI / ML', role: '未知領域研究', group: 'AI' },
+]
+
 export const featureActs = [
   {
     index: '01',
