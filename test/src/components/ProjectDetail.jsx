@@ -3,7 +3,7 @@ const liveSiteUrl = 'https://heh844300-cmyk.github.io'
 
 function ProjectDetail() {
   return (
-    <main className="project-detail">
+    <main id="main-content" className="project-detail">
       <header className="project-detail__nav">
         <a href="#/" className="concept-wordmark">
           KJH <span>QUEST LOG</span>
@@ -14,7 +14,7 @@ function ProjectDetail() {
       <section className="project-detail__hero" aria-labelledby="project-detail-heading">
         <div className="project-detail__content">
           <p className="project-detail__eyebrow">QUEST 05 / FIRST QUEST</p>
-          <h1 id="project-detail-heading">我的個人網站</h1>
+          <h1 id="project-detail-heading" className="main-heading" tabIndex="-1">我的個人網站</h1>
           <p className="project-detail__lead">
             以 Vite、React 與 Tailwind 打造的自我介紹網站，也是我學習的起點。
           </p>

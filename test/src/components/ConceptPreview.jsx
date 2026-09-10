@@ -8,23 +8,6 @@ const projects = [
   { id: 'soon-three', title: 'COMING SOON', subtitle: 'LOCKED' },
 ]
 
-function ContactLinks() {
-  return (
-    <div className="concept-contacts" aria-label="聯絡連結">
-      <a href="https://github.com/heh844300-cmyk" target="_blank" rel="noreferrer" aria-label="GitHub">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.19-3.37-1.19-.45-1.15-1.1-1.46-1.1-1.46-.9-.62.07-.61.07-.61 1 .07 1.52 1.03 1.52 1.03.89 1.52 2.33 1.08 2.9.83.09-.64.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02A9.6 9.6 0 0 1 12 7.45c.85 0 1.71.11 2.51.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z" />
-        </svg>
-        <span>GitHub</span>
-      </a>
-      <a href="mailto:heh844300@gmail.com" aria-label="Gmail">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3.5 5h17a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-17a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm.5 3.5v8h16v-8l-8 5-8-5Zm7 4.2 6.7-4.2H4.3l6.7 4.2Z" /></svg>
-        <span>Gmail</span>
-      </a>
-    </div>
-  )
-}
-
 function ProjectWall() {
   return (
     <section id="projects" data-nav-section className="concept-projects" aria-labelledby="prototype-project-heading">
@@ -49,18 +32,16 @@ function ProjectWall() {
               </span>
             </a>
           ) : (
-            <button
+            <div
               key={project.id}
-              type="button"
               className="project-slice"
-              aria-label={`${project.title}，${project.subtitle}`}
             >
               <span className="project-slice__dial" aria-hidden="true" />
               <span className="project-slice__content">
                 <small>{project.subtitle}</small>
                 <strong>{project.title}</strong>
               </span>
-            </button>
+            </div>
           )
         ))}
       </div>
@@ -114,7 +95,7 @@ function SkillLoadout() {
   )
 }
 
-function ScrollChapter({ children, profile }) {
+function ScrollChapter({ children }) {
   const ref = useRef(null)
   const [phase, setPhase] = useState('before')
 
@@ -148,14 +129,10 @@ function ScrollChapter({ children, profile }) {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
     }
-  }, [profile])
+  }, [])
 
   return (
-    <div
-      ref={ref}
-      data-reveal-profile={profile}
-      className={`scroll-chapter is-${phase}`}
-    >
+    <div ref={ref} className={`scroll-chapter is-${phase}`}>
       <div className="scroll-chapter__pin">
         {children}
       </div>
@@ -166,7 +143,6 @@ function ScrollChapter({ children, profile }) {
 function ConceptPreview() {
   const [activeSection, setActiveSection] = useState('prototype-hero')
   const [menuOpen, setMenuOpen] = useState(false)
-  const [revealProfile, setRevealProfile] = useState('standard')
 
   useEffect(() => {
     const sections = document.querySelectorAll('[data-nav-section]')
@@ -192,8 +168,8 @@ function ConceptPreview() {
 
   return (
     <main
+      id="main-content"
       className="concept-preview concept-preview--gateway concept-preview--gear-candy"
-      data-reveal-profile={revealProfile}
     >
       <header className="concept-nav">
         <a className="concept-wordmark" href="#prototype-hero">
@@ -207,14 +183,6 @@ function ConceptPreview() {
           onClick={() => setMenuOpen((open) => !open)}
         >
           MENU
-        </button>
-        <button
-          type="button"
-          className="concept-motion-profile"
-          aria-pressed={revealProfile === 'lite'}
-          onClick={() => setRevealProfile((profile) => (profile === 'standard' ? 'lite' : 'standard'))}
-        >
-          {revealProfile === 'standard' ? 'MOTION / STANDARD' : 'MOTION / LITE'}
         </button>
         <nav
           id="concept-navigation"
@@ -235,7 +203,6 @@ function ConceptPreview() {
           ))}
         </nav>
       </header>
-      <ContactLinks />
 
       <section id="prototype-hero" data-nav-section className="concept-hero" aria-labelledby="prototype-title">
         <div className="concept-steam concept-steam--one" aria-hidden="true" />
@@ -246,7 +213,7 @@ function ConceptPreview() {
 
         <div className="concept-hero-copy">
           <p className="concept-eyebrow">ADVENTURER PROFILE / LV. 01</p>
-          <h1 id="prototype-title">柯均翰 <span>HEH</span></h1>
+          <h1 id="prototype-title" className="main-heading" tabIndex="-1">柯均翰 <span>HEH</span></h1>
           <p className="concept-role">未知領域的實習機械術士</p>
           <p className="concept-intro">
             主修資訊工程，正在以人工智慧與機器學習，製作下一段可被遊玩的未來。
@@ -267,7 +234,7 @@ function ConceptPreview() {
         </aside>
       </section>
 
-      <ScrollChapter profile={revealProfile}>
+      <ScrollChapter>
         <section id="adventurer-dossier" data-nav-section className="adventurer-dossier" aria-labelledby="dossier-heading">
           <div className="dossier-frame">
             <div className="concept-section-label">
@@ -289,9 +256,9 @@ function ConceptPreview() {
         </section>
       </ScrollChapter>
 
-      <ScrollChapter profile={revealProfile}><QuestAchievements /></ScrollChapter>
-      <ScrollChapter profile={revealProfile}><SkillLoadout /></ScrollChapter>
-      <ScrollChapter profile={revealProfile}><ProjectWall /></ScrollChapter>
+      <ScrollChapter><QuestAchievements /></ScrollChapter>
+      <ScrollChapter><SkillLoadout /></ScrollChapter>
+      <ScrollChapter><ProjectWall /></ScrollChapter>
       <footer className="concept-footer">
         <span>STYLE PROTOTYPE / NO CONTENT CHANGED</span>
       </footer>

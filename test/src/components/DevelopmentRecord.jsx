@@ -57,7 +57,7 @@ function DevelopmentRecord() {
   }, [])
 
   return (
-    <main className="development-record">
+    <main id="main-content" className="development-record">
       <header className="development-record__nav">
         <a href="#/projects/personal-site" className="project-detail__back">&lt;- 回到專案案例</a>
         <a href="#/" className="concept-wordmark">KJH <span>QUEST LOG</span></a>
@@ -65,7 +65,7 @@ function DevelopmentRecord() {
 
       <section className="development-record__intro" aria-labelledby="development-record-heading">
         <p>DEVELOPMENT RECORD / SPECIMEN 01</p>
-        <h1 id="development-record-heading">讓一個網站<br />慢慢長出來</h1>
+        <h1 id="development-record-heading" className="main-heading" tabIndex="-1">讓一個網站<br />慢慢長出來</h1>
         <p>
           這不是 AI 應用，而是我使用 GPT-5.6 輔助規劃、實作、除錯與驗收個人網站的開發紀錄。
           每一項建議都由我判斷、整合與驗證。
