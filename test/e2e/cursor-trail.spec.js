@@ -1,60 +1,57 @@
 import { expect, test } from '@playwright/test'
 
-test('桌面滑鼠移動產生會淡出的粉紫粒子軌跡', async ({ page }) => {
+test('桌面滑鼠移動啟動 Canvas 尾線與稀疏粒子', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' })
   await page.addInitScript(() => localStorage.clear())
   await page.goto('/')
   await expect(page.locator('[data-motion-reduced="false"]')).toBeVisible()
 
+  const canvas = page.locator('[data-cursor-trail-canvas]')
+  await expect(canvas).toBeVisible()
   await page.mouse.move(240, 240)
-  const particles = page.locator('[data-cursor-particle]')
-  await expect.poll(() => particles.count()).toBeGreaterThanOrEqual(10)
-  await expect.poll(() => particles.count()).toBeLessThanOrEqual(15)
-  await expect.poll(() => particles.first().evaluate((element) => Number.parseFloat(getComputedStyle(element).width))).toBe(4.5)
-  const positions = await particles.evaluateAll((elements) => elements.map((element) => ({
-    left: Number.parseFloat(getComputedStyle(element).left),
-    top: Number.parseFloat(getComputedStyle(element).top),
-  })))
-  expect(new Set(positions.map(({ left, top }) => `${left}:${top}`)).size).toBeGreaterThan(1)
-  positions.forEach(({ left, top }) => {
-    expect(Math.hypot(left - 240, top - 240)).toBeLessThanOrEqual(12)
-  })
-  const particleStyles = await particles.evaluateAll((elements) => elements.map((element) => {
-    const style = getComputedStyle(element)
-    return { borderWidth: Number.parseFloat(style.borderTopWidth), boxShadow: style.boxShadow }
-  }))
-  particleStyles.forEach(({ borderWidth, boxShadow }) => {
-    expect(borderWidth).toBeGreaterThan(0)
-    expect(boxShadow).not.toBe('none')
-  })
+  await expect(canvas).toHaveAttribute('data-trail-active', 'true')
+  await expect(canvas).toHaveAttribute('data-particle-count', '4')
 
   await page.waitForTimeout(600)
-  await expect.poll(() => particles.first().evaluate((element) => Number(getComputedStyle(element).opacity))).toBeLessThan(1)
-
-  await page.waitForTimeout(1000)
-  await expect(particles).toHaveCount(0)
+  await expect(canvas).toHaveAttribute('data-trail-active', 'false')
 })
 
-test('快速連續移動仍持續產生粒子群', async ({ page }) => {
+test('連續移動以節流的粒子群維持 Canvas 尾線', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' })
   await page.addInitScript(() => localStorage.clear())
   await page.goto('/')
   await expect(page.locator('[data-motion-reduced="false"]')).toBeVisible()
 
+  const canvas = page.locator('[data-cursor-trail-canvas]')
   await page.mouse.move(120, 180)
+  await page.waitForTimeout(60)
   await page.mouse.move(260, 260)
+  await page.waitForTimeout(60)
   await page.mouse.move(420, 340)
 
-  await expect.poll(() => page.locator('[data-cursor-particle]').count()).toBeGreaterThanOrEqual(30)
+  await expect(canvas).toHaveAttribute('data-trail-active', 'true')
+  await expect(canvas).toHaveAttribute('data-particle-count', '12')
+})
+
+test('關閉動效時 Canvas 不繪製尾線或粒子', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('motion-preference', 'reduced'))
+  await page.goto('/')
+
+  const canvas = page.locator('[data-cursor-trail-canvas]')
+  await page.mouse.move(240, 240)
+  await expect(canvas).toHaveAttribute('data-trail-active', 'false')
+  await expect(canvas).toHaveAttribute('data-particle-count', '0')
 })
 
 test.describe('手機觸控', () => {
   test.use({ hasTouch: true, viewport: { width: 390, height: 844 } })
 
-  test('觸控不產生滑鼠粒子軌跡', async ({ page }) => {
+  test('觸控不啟動 Canvas 尾線或粒子', async ({ page }) => {
     await page.goto('/')
     await page.touchscreen.tap(200, 300)
 
-    await expect(page.locator('[data-cursor-particle]')).toHaveCount(0)
+    const canvas = page.locator('[data-cursor-trail-canvas]')
+    await expect(canvas).toHaveAttribute('data-trail-active', 'false')
+    await expect(canvas).toHaveAttribute('data-particle-count', '0')
   })
 })

@@ -708,18 +708,6 @@ html[data-motion='off'] .hero-title {
 .concept-contacts button:hover,
 .concept-contacts button:focus-visible { width: 6.8rem; box-shadow: 0 0 0 3px rgb(255 154 203 / 25%), 0 0 1.5rem rgb(255 154 203 / 55%); outline: none; }
 .cursor-trail { position: fixed; inset: 0; z-index: 40; pointer-events: none; }
-.cursor-trail__particle {
-  position: absolute;
-  width: 0.28125rem;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  opacity: 1;
-  transform: translate(-50%, -50%);
-  animation: cursor-trail-fade 1s ease 0.5s forwards;
-}
-.cursor-trail__particle--pink { border: 1px solid #4a1e58; background: #ff9acb; box-shadow: 0 0 0.75rem #4a1e58; }
-.cursor-trail__particle--purple { border: 1px solid #fff0f8; background: #a84ce0; box-shadow: 0 0 0.75rem #fff0f8; }
-@keyframes cursor-trail-fade { to { opacity: 0; transform: translate(-50%, -130%) scale(0.2); } }
 
 .concept-hero {
   isolation: isolate;
