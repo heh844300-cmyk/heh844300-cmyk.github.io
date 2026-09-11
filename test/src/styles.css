@@ -703,6 +703,9 @@ html[data-motion='off'] .hero-title {
 .concept-contacts svg { flex: none; width: 1.45rem; height: 1.45rem; }
 .concept-contacts span { white-space: nowrap; font-weight: 800; }
 .concept-contacts button span { margin-left: -0.25rem; }
+.dossier-next { display: inline-flex; margin-top: 1.25rem; color: #713b9d; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-decoration: none; }
+.dossier-next::after { content: ' ->'; }
+.dossier-next:hover, .dossier-next:focus-visible { color: #b94c96; outline: 2px solid #b94c96; outline-offset: 0.3rem; }
 .concept-contacts a:hover,
 .concept-contacts a:focus-visible,
 .concept-contacts button:hover,

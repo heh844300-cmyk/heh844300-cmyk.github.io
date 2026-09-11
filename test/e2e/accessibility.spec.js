@@ -15,6 +15,17 @@ test('鍵盤使用者可跳至首頁主標題', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toBeFocused()
 })
 
+test('skip link 從專案案例回到個人網站首頁', async ({ page }) => {
+  await page.goto('/#/projects/personal-site')
+
+  const skipLink = page.getByRole('link', { name: '跳至主要內容' })
+  await skipLink.focus()
+  await page.keyboard.press('Enter')
+
+  await expect(page).toHaveURL(/#\/$/)
+  await expect(page.getByRole('heading', { level: 1, name: /柯均翰/ })).toBeFocused()
+})
+
 test('LOCKED 專案卡提供狀態資訊但不是可聚焦控制項', async ({ page }) => {
   await page.goto('/')
 
@@ -109,6 +120,18 @@ test('鍵盤可用 Enter 與 Space 複製標語', async ({ context, page }) => {
     await expect(page.getByText('標語已複製')).toBeVisible()
     await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toBe('Cogito, ergo sum')
   }
+})
+
+test('標語後可用鍵盤前往任務成就', async ({ page }) => {
+  await page.goto('/')
+
+  const copyButton = page.getByRole('button', { name: '複製標語' })
+  await copyButton.focus()
+  await page.keyboard.press('Tab')
+  await expect(page.getByRole('link', { name: '前往任務成就' })).toBeFocused()
+
+  await page.keyboard.press('Enter')
+  await expect(page.getByRole('heading', { level: 2, name: 'QUEST ACHIEVEMENTS' })).toBeFocused()
 })
 
 test('標語已複製提示在三秒後淡出並於五秒後消失', async ({ context, page }) => {

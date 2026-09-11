@@ -55,7 +55,7 @@ function QuestAchievements() {
       <div className="quest-achievements__inner">
         <div className="concept-section-label">
           <span>03</span>
-          <h2 id="achievements-heading">QUEST ACHIEVEMENTS</h2>
+              <h2 id="achievements-heading" tabIndex="-1">QUEST ACHIEVEMENTS</h2>
         </div>
         <p className="quest-achievements__hint">COMPLETED QUEST LOG</p>
         <div className="quest-achievements__list">
@@ -184,7 +184,7 @@ function ConceptPreview() {
         <a className="concept-wordmark" href="#prototype-hero">
           KJH <span>QUEST LOG</span>
         </a>
-        <button
+              <button
           type="button"
           className="concept-menu-toggle"
           aria-expanded={menuOpen}
@@ -277,10 +277,22 @@ function ConceptPreview() {
                   setMottoFading(false)
                 }, 5000)
               }}
-            >
-              複製標語
-            </button>
-            {mottoCopied && <span className={`dossier-copy-status ${mottoFading ? 'is-fading' : ''}`} role="status">標語已複製</span>}
+              >
+                複製標語
+              </button>
+              <a
+                className="dossier-next"
+                href="#achievements"
+                onClick={(event) => {
+                  event.preventDefault()
+                  const heading = document.querySelector('#achievements-heading')
+                  heading?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                  heading?.focus()
+                }}
+              >
+                前往任務成就
+              </a>
+              {mottoCopied && <span className={`dossier-copy-status ${mottoFading ? 'is-fading' : ''}`} role="status">標語已複製</span>}
             <p className="dossier-intro">
               我相信思考是探索的起點。在未知中持續提問、學習，並把每一次理解化為下一次前進的方向。
             </p>

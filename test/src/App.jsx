@@ -61,11 +61,7 @@ function App() {
     <div data-motion-reduced={motionReduced}>
       <a
         className="skip-link"
-        href="#main-content"
-        onClick={(event) => {
-          event.preventDefault()
-          document.querySelector('main h1')?.focus()
-        }}
+        href="#/"
       >
         跳至主要內容
       </a>
