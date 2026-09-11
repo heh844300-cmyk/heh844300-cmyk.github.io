@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import ConceptPreview from './components/ConceptPreview.jsx'
+import CursorTrail from './components/CursorTrail.jsx'
 import DevelopmentRecord from './components/DevelopmentRecord.jsx'
 import FixedActions from './components/FixedActions.jsx'
 import ProjectDetail from './components/ProjectDetail.jsx'
@@ -74,6 +75,7 @@ function App() {
         motionPreference={motionPreference}
         onMotionToggle={cycleMotionPreference}
       />
+      <CursorTrail disabled={motionReduced} />
     </div>
   )
 }

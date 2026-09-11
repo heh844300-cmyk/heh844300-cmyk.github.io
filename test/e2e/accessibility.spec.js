@@ -83,6 +83,51 @@ test('時間軸節點可用左右鍵移動焦點並展開目前節點', async ({
   await expect(nodes.nth(1)).toBeFocused()
 })
 
+test('冒險者檔案可將標語複製到剪貼簿', async ({ context, page }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+  await page.goto('/')
+
+  await page.getByRole('button', { name: '複製標語' }).click()
+
+  await expect(page.getByText('標語已複製')).toBeVisible()
+  await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toBe('Cogito, ergo sum')
+})
+
+test('鍵盤可用 Enter 與 Space 複製標語', async ({ context, page }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+
+  for (const key of ['Enter', ' ']) {
+    await page.goto('/')
+    const button = page.getByRole('button', { name: '複製標語' })
+    await button.focus()
+    await page.keyboard.press(key)
+
+    await expect(page.getByText('標語已複製')).toBeVisible()
+    await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toBe('Cogito, ergo sum')
+  }
+})
+
+test('標語已複製提示在三秒後淡出並於五秒後消失', async ({ context, page }) => {
+  await context.grantPermissions(['clipboard-write'])
+  await page.goto('/')
+
+  await page.getByRole('button', { name: '複製標語' }).click()
+  const status = page.getByText('標語已複製')
+  await expect(status).toBeVisible()
+
+  await page.waitForTimeout(3100)
+  await expect.poll(() => status.evaluate((element) => Number(getComputedStyle(element).opacity))).toBeLessThan(1)
+
+  await page.waitForTimeout(2100)
+  await expect(status).toHaveCount(0)
+})
+
+test('專案案例顯示個人網站首頁預覽', async ({ page }) => {
+  await page.goto('/#/projects/personal-site')
+
+  await expect(page.getByRole('img', { name: '個人網站首頁預覽' })).toBeVisible()
+})
+
 test.describe('手機觸控操作', () => {
   test.use({ hasTouch: true, viewport: { width: 390, height: 844 } })
 

@@ -143,6 +143,10 @@ function ScrollChapter({ children }) {
 function ConceptPreview() {
   const [activeSection, setActiveSection] = useState('prototype-hero')
   const [menuOpen, setMenuOpen] = useState(false)
+  const [mottoCopied, setMottoCopied] = useState(false)
+  const [mottoFading, setMottoFading] = useState(false)
+  const mottoFadeTimer = useRef(0)
+  const mottoHideTimer = useRef(0)
 
   useEffect(() => {
     const sections = document.querySelectorAll('[data-nav-section]')
@@ -156,6 +160,11 @@ function ConceptPreview() {
 
     sections.forEach((section) => observer.observe(section))
     return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => () => {
+    clearTimeout(mottoFadeTimer.current)
+    clearTimeout(mottoHideTimer.current)
   }, [])
 
   const navigation = [
@@ -253,6 +262,25 @@ function ConceptPreview() {
             <p className="dossier-classification">CORE BELIEF / ACTIVE</p>
             <blockquote className="dossier-motto">Cogito, ergo sum</blockquote>
             <p className="dossier-translation">我思故我在</p>
+            <button
+              type="button"
+              className="dossier-copy"
+              onClick={async () => {
+                await navigator.clipboard.writeText('Cogito, ergo sum')
+                clearTimeout(mottoFadeTimer.current)
+                clearTimeout(mottoHideTimer.current)
+                setMottoCopied(true)
+                setMottoFading(false)
+                mottoFadeTimer.current = window.setTimeout(() => setMottoFading(true), 3000)
+                mottoHideTimer.current = window.setTimeout(() => {
+                  setMottoCopied(false)
+                  setMottoFading(false)
+                }, 5000)
+              }}
+            >
+              複製標語
+            </button>
+            {mottoCopied && <span className={`dossier-copy-status ${mottoFading ? 'is-fading' : ''}`} role="status">標語已複製</span>}
             <p className="dossier-intro">
               我相信思考是探索的起點。在未知中持續提問、學習，並把每一次理解化為下一次前進的方向。
             </p>

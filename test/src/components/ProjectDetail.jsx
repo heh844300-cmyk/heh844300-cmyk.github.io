@@ -35,8 +35,9 @@ function ProjectDetail() {
           </div>
         </div>
         <div className="project-detail__previews" aria-label="個人網站預覽">
-          <div className="project-detail__preview" role="img" aria-label="網站截圖預留位置">
-            <p>PROJECT PREVIEW</p>
+          <div className="project-detail__preview">
+            <img src="/personal-site-preview.png" alt="個人網站首頁預覽" />
+            <p>WEBSITE PREVIEW</p>
           </div>
         </div>
       </section>
