@@ -658,7 +658,7 @@ html[data-motion='off'] .hero-title {
   font-weight: 900;
   text-decoration: none;
 }
-.skip-link:focus { top: 1rem; outline: 3px solid var(--candy); outline-offset: 3px; }
+.skip-link:focus { left: 50%; top: 1.5rem; outline: 3px solid var(--candy); outline-offset: 3px; transform: translateX(-50%); }
 .main-heading:focus { outline: 3px solid var(--candy); outline-offset: 0.2em; }
 :focus-visible { outline: 3px solid var(--candy) !important; outline-offset: 3px; }
 [data-nav-section] { scroll-margin-top: 5.5rem; }
@@ -710,15 +710,15 @@ html[data-motion='off'] .hero-title {
 .cursor-trail { position: fixed; inset: 0; z-index: 40; pointer-events: none; }
 .cursor-trail__particle {
   position: absolute;
-  width: 0.1875rem;
+  width: 0.28125rem;
   aspect-ratio: 1;
   border-radius: 50%;
   opacity: 1;
   transform: translate(-50%, -50%);
   animation: cursor-trail-fade 1s ease 0.5s forwards;
 }
-.cursor-trail__particle--pink { background: #ff9acb; box-shadow: 0 0 0.75rem #ff9acb; }
-.cursor-trail__particle--purple { background: #a84ce0; box-shadow: 0 0 0.75rem #a84ce0; }
+.cursor-trail__particle--pink { border: 1px solid #4a1e58; background: #ff9acb; box-shadow: 0 0 0.75rem #4a1e58; }
+.cursor-trail__particle--purple { border: 1px solid #fff0f8; background: #a84ce0; box-shadow: 0 0 0.75rem #fff0f8; }
 @keyframes cursor-trail-fade { to { opacity: 0; transform: translate(-50%, -130%) scale(0.2); } }
 
 .concept-hero {

@@ -16,7 +16,7 @@ function CursorTrail({ disabled }) {
         const id = particleId.current
         particleId.current += 1
         const angle = Math.random() * Math.PI * 2
-        const distance = Math.sqrt(Math.random()) * 24
+        const distance = Math.sqrt(Math.random()) * 12
         return {
           id,
           x: event.clientX + Math.cos(angle) * distance,

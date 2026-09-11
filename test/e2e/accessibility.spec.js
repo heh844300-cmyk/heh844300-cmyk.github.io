@@ -6,6 +6,10 @@ test('鍵盤使用者可跳至首頁主標題', async ({ page }) => {
   const skipLink = page.getByRole('link', { name: '跳至主要內容' })
   await skipLink.focus()
   await expect(skipLink).toBeFocused()
+  const bounds = await skipLink.boundingBox()
+  const viewport = page.viewportSize()
+  expect(bounds.y).toBe(24)
+  expect(Math.abs(bounds.x + bounds.width / 2 - viewport.width / 2)).toBeLessThan(1)
 
   await page.keyboard.press('Enter')
   await expect(page.getByRole('heading', { level: 1 })).toBeFocused()

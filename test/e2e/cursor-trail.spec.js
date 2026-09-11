@@ -10,14 +10,22 @@ test('桌面滑鼠移動產生會淡出的粉紫粒子軌跡', async ({ page }) 
   const particles = page.locator('[data-cursor-particle]')
   await expect.poll(() => particles.count()).toBeGreaterThanOrEqual(10)
   await expect.poll(() => particles.count()).toBeLessThanOrEqual(15)
-  await expect.poll(() => particles.first().evaluate((element) => Number.parseFloat(getComputedStyle(element).width))).toBeLessThan(4)
+  await expect.poll(() => particles.first().evaluate((element) => Number.parseFloat(getComputedStyle(element).width))).toBe(4.5)
   const positions = await particles.evaluateAll((elements) => elements.map((element) => ({
     left: Number.parseFloat(getComputedStyle(element).left),
     top: Number.parseFloat(getComputedStyle(element).top),
   })))
   expect(new Set(positions.map(({ left, top }) => `${left}:${top}`)).size).toBeGreaterThan(1)
   positions.forEach(({ left, top }) => {
-    expect(Math.hypot(left - 240, top - 240)).toBeLessThanOrEqual(24)
+    expect(Math.hypot(left - 240, top - 240)).toBeLessThanOrEqual(12)
+  })
+  const particleStyles = await particles.evaluateAll((elements) => elements.map((element) => {
+    const style = getComputedStyle(element)
+    return { borderWidth: Number.parseFloat(style.borderTopWidth), boxShadow: style.boxShadow }
+  }))
+  particleStyles.forEach(({ borderWidth, boxShadow }) => {
+    expect(borderWidth).toBeGreaterThan(0)
+    expect(boxShadow).not.toBe('none')
   })
 
   await page.waitForTimeout(600)
