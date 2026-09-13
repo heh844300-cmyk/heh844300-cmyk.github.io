@@ -97,6 +97,13 @@ function App() {
     requestFocus((request) => request + 1)
   }
 
+  const navigateToHomeFragment = (destination, focusTarget) => {
+    homeNavigationFocusTarget.current = focusTarget
+    window.history.pushState(null, '', destination)
+    setRoute(destination)
+    setNavigationVersion((version) => version + 1)
+  }
+
   const handleSkipLink = (event) => {
     event.preventDefault()
     requestHomeNavigation('#/', setSkipFocusRequest)
@@ -111,7 +118,7 @@ function App() {
     ? <ProjectDetail onHomeReturn={handleProjectReturn} />
     : route === '#/projects/personal-site/development-record'
       ? <DevelopmentRecord onHomeReturn={handleProjectReturn} />
-      : <ConceptPreview />
+      : <ConceptPreview onFragmentNavigate={navigateToHomeFragment} />
   const motionReduced = motionPreference === 'reduced'
     || (motionPreference === 'system' && systemMotionReduced)
   const cycleMotionPreference = () => {

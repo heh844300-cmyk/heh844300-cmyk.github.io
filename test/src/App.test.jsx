@@ -119,4 +119,22 @@ describe('hash 路由', () => {
     await waitFor(() => expect(window.location.hash).toBe('#prototype-hero'))
     expect(homeLink).toBe(document.activeElement)
   })
+
+  it.each([
+    ['DOSSIER', '#adventurer-dossier'],
+    ['QUESTS', '#achievements'],
+    ['SKILLS', '#skills'],
+    ['PROJECTS', '#projects'],
+  ])('首頁導覽 %s 以單一次程式捲動前往 %s', async (label, route) => {
+    render(<App />)
+    const link = screen.getByRole('navigation', { name: '頁面導覽' }).getByRole('link', { name: new RegExp(label) })
+
+    HTMLElement.prototype.scrollIntoView.mockClear()
+    link.focus()
+    fireEvent.click(link)
+
+    await waitFor(() => expect(window.location.hash).toBe(route))
+    expect(HTMLElement.prototype.scrollIntoView).toHaveBeenCalledTimes(1)
+    expect(link).toBe(document.activeElement)
+  })
 })

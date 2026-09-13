@@ -140,7 +140,7 @@ function ScrollChapter({ id, children }) {
   )
 }
 
-function ConceptPreview() {
+function ConceptPreview({ onFragmentNavigate }) {
   const [activeSection, setActiveSection] = useState('prototype-hero')
   const [menuOpen, setMenuOpen] = useState(false)
   const [mottoCopied, setMottoCopied] = useState(false)
@@ -181,7 +181,14 @@ function ConceptPreview() {
       className="concept-preview concept-preview--gateway concept-preview--gear-candy"
     >
       <header className="concept-nav">
-        <a className="concept-wordmark" href="#prototype-hero">
+        <a
+          className="concept-wordmark"
+          href="#prototype-hero"
+          onClick={(event) => {
+            event.preventDefault()
+            onFragmentNavigate('#prototype-hero', event.currentTarget)
+          }}
+        >
           KJH <span>QUEST LOG</span>
         </a>
               <button
@@ -204,7 +211,11 @@ function ConceptPreview() {
               href={`#${item.id}`}
               className={activeSection === item.id ? 'is-active' : ''}
               aria-current={activeSection === item.id ? 'page' : undefined}
-              onClick={() => setMenuOpen(false)}
+              onClick={(event) => {
+                event.preventDefault()
+                setMenuOpen(false)
+                onFragmentNavigate(`#${item.id}`, event.currentTarget)
+              }}
               onKeyDown={(event) => {
                 const direction = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0
                 if (!direction) return
