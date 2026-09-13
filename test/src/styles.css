@@ -661,8 +661,6 @@ html[data-motion='off'] .hero-title {
 .skip-link:focus { left: 50%; top: 1.5rem; outline: 3px solid var(--candy); outline-offset: 3px; transform: translateX(-50%); }
 .main-heading:focus { outline: 3px solid var(--candy); outline-offset: 0.2em; }
 :focus-visible { outline: 3px solid var(--candy) !important; outline-offset: 3px; }
-[data-nav-section],
-.scroll-chapter[id] { scroll-margin-top: 5.5rem; }
 .concept-wordmark { color: inherit; font-weight: 900; letter-spacing: 0.08em; text-decoration: none; }
 .concept-wordmark span { color: var(--candy); font-size: 0.65rem; font-weight: 500; }
 .concept-navigation { display: flex; align-items: center; gap: 0.25rem; }

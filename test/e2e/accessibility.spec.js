@@ -114,6 +114,19 @@ test.describe('首頁 hash 導覽', () => {
        await expect(page.getByRole('heading', { name: heading })).toBeVisible()
     })
   }
+
+  test('從首頁主區段以鍵盤啟動 QUESTS 後顯示任務成就', async ({ page }) => {
+    await page.goto('/#prototype-hero')
+    const link = page.getByRole('navigation', { name: '頁面導覽' }).getByRole('link', { name: /QUESTS/ })
+
+    await link.focus()
+    await page.keyboard.press('Enter')
+
+    await expect(page).toHaveURL(/#achievements$/)
+    await expectSectionNearTop(page, 'achievements')
+    await expect(page.getByRole('heading', { name: 'QUEST ACHIEVEMENTS' })).toBeVisible()
+    await expect(link).toBeFocused()
+  })
 })
 
 test.describe('專案頁回首頁', () => {
@@ -124,7 +137,7 @@ test.describe('專案頁回首頁', () => {
   ]
 
   for (const [path, linkName] of projectPaths) {
-    test(`${path} 轉移主標題焦點`, async ({ page }) => {
+    test(`${path} 由 ${linkName} 轉移主標題焦點`, async ({ page }) => {
       await page.goto(path)
       const link = page.getByRole('link', { name: linkName })
       await link.focus()
