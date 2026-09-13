@@ -1,5 +1,12 @@
 import { expect, test } from '@playwright/test'
 
+async function expectSectionNearTop(page, sectionId) {
+  const section = page.locator(`#${sectionId}`)
+  await expect.poll(() => section.evaluate((element) => element.getBoundingClientRect().top)).toBeGreaterThanOrEqual(0)
+  // Sections use a 5.5rem scroll margin beneath the fixed navigation.
+  await expect.poll(() => section.evaluate((element) => element.getBoundingClientRect().top)).toBeLessThanOrEqual(112)
+}
+
 test('鍵盤使用者可跳至首頁主標題', async ({ page }) => {
   await page.goto('/')
 
@@ -12,6 +19,7 @@ test('鍵盤使用者可跳至首頁主標題', async ({ page }) => {
   expect(Math.abs(bounds.x + bounds.width / 2 - viewport.width / 2)).toBeLessThan(1)
 
   await page.keyboard.press('Enter')
+  await expect(page).toHaveURL(/#\/$/)
   await expect(page.getByRole('heading', { level: 1 })).toBeFocused()
 })
 
@@ -72,6 +80,68 @@ test('hash 路由切換後焦點移至新頁主標題', async ({ page }) => {
   await page.getByRole('link', { name: '展開成長紀錄 ->' }).click()
   await expect(page).toHaveURL(/#\/projects\/personal-site\/development-record$/)
   await expect(page.getByRole('heading', { level: 1 })).toBeFocused()
+})
+
+test.describe('首頁 hash 導覽', () => {
+  const homeNavigation = [
+    ['HOME', '#prototype-hero', 'prototype-hero'],
+    ['DOSSIER', '#adventurer-dossier', 'adventurer-dossier'],
+    ['QUESTS', '#achievements', 'achievements'],
+    ['SKILLS', '#skills', 'skills'],
+    ['PROJECTS', '#projects', 'projects'],
+  ]
+
+  for (const [label, hash, sectionId] of homeNavigation) {
+    test(`${label} 保留啟動連結焦點並定位目標`, async ({ page }) => {
+      await page.goto('/')
+      const link = page.getByRole('navigation', { name: '頁面導覽' }).getByRole('link', { name: new RegExp(label) })
+      await link.focus()
+      await page.keyboard.press('Enter')
+
+       await expect(page).toHaveURL(new RegExp(`${hash}$`))
+       await expect(page.locator(`#${sectionId}`)).toBeInViewport()
+       await expectSectionNearTop(page, sectionId)
+       await expect(link).toBeFocused()
+    })
+
+    test(`cold-load ${label} 定位目標`, async ({ page }) => {
+      await page.goto(`/${hash}`)
+
+       await expect(page.getByRole('heading', { level: 1, name: /柯均翰/ })).toBeVisible()
+       await expect(page.locator(`#${sectionId}`)).toBeInViewport()
+       await expectSectionNearTop(page, sectionId)
+    })
+  }
+})
+
+test.describe('專案頁回首頁', () => {
+  const projectPaths = [
+    ['/#/projects/personal-site', 'BACK TO QUEST LOG'],
+    ['/#/projects/personal-site', /KJH QUEST LOG/],
+    ['/#/projects/personal-site/development-record', /KJH QUEST LOG/],
+  ]
+
+  for (const [path, linkName] of projectPaths) {
+    test(`${path} 轉移主標題焦點`, async ({ page }) => {
+      await page.goto(path)
+      const link = page.getByRole('link', { name: linkName })
+      await link.focus()
+      await page.keyboard.press('Enter')
+
+       await expect(page).toHaveURL(/#prototype-hero$/)
+       await expect(page.locator('#prototype-hero')).toBeInViewport()
+       await expectSectionNearTop(page, 'prototype-hero')
+       await expect(page.getByRole('heading', { level: 1, name: /柯均翰/ })).toBeFocused()
+    })
+  }
+})
+
+test('未知 hash fallback 到首頁', async ({ page }) => {
+  await page.goto('/#not-a-route')
+
+  await expect(page.locator('#prototype-hero')).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1, name: '我的個人網站' })).toHaveCount(0)
+  await expect(page.getByRole('heading', { level: 1, name: /讓一個網站\s*慢慢長出來/ })).toHaveCount(0)
 })
 
 test('桌面導覽可用左右鍵移動焦點', async ({ page }) => {

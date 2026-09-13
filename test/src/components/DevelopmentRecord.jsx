@@ -28,7 +28,7 @@ const recordSteps = [
   },
 ]
 
-function DevelopmentRecord() {
+function DevelopmentRecord({ onHomeReturn }) {
   const [activeStep, setActiveStep] = useState(null)
 
   useEffect(() => {
@@ -60,7 +60,7 @@ function DevelopmentRecord() {
     <main id="main-content" className="development-record">
       <header className="development-record__nav">
         <a href="#/projects/personal-site" className="project-detail__back">&lt;- 回到專案案例</a>
-        <a href="#/" className="concept-wordmark">KJH <span>QUEST LOG</span></a>
+        <a href="#prototype-hero" className="concept-wordmark" onClick={onHomeReturn}>KJH <span>QUEST LOG</span></a>
       </header>
 
       <section className="development-record__intro" aria-labelledby="development-record-heading">

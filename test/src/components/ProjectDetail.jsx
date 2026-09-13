@@ -1,14 +1,14 @@
 const repositoryUrl = 'https://github.com/heh844300-cmyk/heh844300-cmyk.github.io'
 const liveSiteUrl = 'https://heh844300-cmyk.github.io'
 
-function ProjectDetail() {
+function ProjectDetail({ onHomeReturn }) {
   return (
     <main id="main-content" className="project-detail">
       <header className="project-detail__nav">
-        <a href="#/" className="concept-wordmark">
+        <a href="#prototype-hero" className="concept-wordmark" onClick={onHomeReturn}>
           KJH <span>QUEST LOG</span>
         </a>
-        <a href="#/" className="project-detail__back">BACK TO QUEST LOG</a>
+        <a href="#prototype-hero" className="project-detail__back" onClick={onHomeReturn}>BACK TO QUEST LOG</a>
       </header>
 
       <section className="project-detail__hero" aria-labelledby="project-detail-heading">

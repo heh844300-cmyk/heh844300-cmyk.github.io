@@ -6,10 +6,25 @@ import FixedActions from './components/FixedActions.jsx'
 import ProjectDetail from './components/ProjectDetail.jsx'
 
 const motionPreferenceKey = 'motion-preference'
+const projectRoutes = new Set([
+  '#/projects/personal-site',
+  '#/projects/personal-site/development-record',
+])
+const homeFragments = new Set([
+  '#prototype-hero',
+  '#adventurer-dossier',
+  '#achievements',
+  '#skills',
+  '#projects',
+])
 
 function App() {
   const [route, setRoute] = useState(() => window.location.hash)
+  const [navigationVersion, setNavigationVersion] = useState(0)
+  const [skipFocusRequest, setSkipFocusRequest] = useState(0)
+  const [returnFocusRequest, setReturnFocusRequest] = useState(0)
   const isInitialRoute = useRef(true)
+  const homeNavigationFocusTarget = useRef(null)
   const [motionPreference, setMotionPreference] = useState(
     () => localStorage.getItem(motionPreferenceKey) ?? 'system',
   )
@@ -18,7 +33,16 @@ function App() {
   )
 
   useEffect(() => {
-    const onHashChange = () => setRoute(window.location.hash)
+    const onHashChange = () => {
+      const activeElement = document.activeElement
+      homeNavigationFocusTarget.current = activeElement instanceof HTMLAnchorElement
+        && activeElement.closest('nav[aria-label="頁面導覽"]')
+        && activeElement.hash === window.location.hash
+        ? activeElement
+        : null
+      setRoute(window.location.hash)
+      setNavigationVersion((version) => version + 1)
+    }
     window.addEventListener('hashchange', onHashChange)
     return () => window.removeEventListener('hashchange', onHashChange)
   }, [])
@@ -36,13 +60,57 @@ function App() {
       isInitialRoute.current = false
       return
     }
-    document.querySelector('main h1')?.focus()
-  }, [route])
+    if (!projectRoutes.has(route)) return undefined
+    const frame = requestAnimationFrame(() => document.querySelector('main h1')?.focus())
+    return () => cancelAnimationFrame(frame)
+  }, [route, navigationVersion])
+
+  useEffect(() => {
+    if (!homeFragments.has(route)) return undefined
+    const frame = requestAnimationFrame(() => {
+      document.getElementById(route.slice(1))?.scrollIntoView({ block: 'start' })
+      homeNavigationFocusTarget.current?.focus()
+      homeNavigationFocusTarget.current = null
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [route, navigationVersion])
+
+  useEffect(() => {
+    if (!skipFocusRequest || route !== '#/') return undefined
+    const frame = requestAnimationFrame(() => document.querySelector('main h1')?.focus())
+    return () => cancelAnimationFrame(frame)
+  }, [route, navigationVersion, skipFocusRequest])
+
+  useEffect(() => {
+    if (!returnFocusRequest || route !== '#prototype-hero') return undefined
+    const frame = requestAnimationFrame(() => {
+      document.querySelector('main h1')?.focus()
+      setReturnFocusRequest(0)
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [route, navigationVersion, returnFocusRequest])
+
+  const requestHomeNavigation = (destination, requestFocus) => {
+    window.location.hash = destination
+    setRoute(destination)
+    setNavigationVersion((version) => version + 1)
+    requestFocus((request) => request + 1)
+  }
+
+  const handleSkipLink = (event) => {
+    event.preventDefault()
+    requestHomeNavigation('#/', setSkipFocusRequest)
+  }
+
+  const handleProjectReturn = (event) => {
+    event.preventDefault()
+    requestHomeNavigation('#prototype-hero', setReturnFocusRequest)
+  }
 
   const page = route === '#/projects/personal-site'
-    ? <ProjectDetail />
+    ? <ProjectDetail onHomeReturn={handleProjectReturn} />
     : route === '#/projects/personal-site/development-record'
-      ? <DevelopmentRecord />
+      ? <DevelopmentRecord onHomeReturn={handleProjectReturn} />
       : <ConceptPreview />
   const motionReduced = motionPreference === 'reduced'
     || (motionPreference === 'system' && systemMotionReduced)
@@ -62,6 +130,7 @@ function App() {
       <a
         className="skip-link"
         href="#/"
+        onClick={handleSkipLink}
       >
         跳至主要內容
       </a>
