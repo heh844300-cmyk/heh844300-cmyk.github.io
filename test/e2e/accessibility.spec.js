@@ -84,14 +84,14 @@ test('hash 路由切換後焦點移至新頁主標題', async ({ page }) => {
 
 test.describe('首頁 hash 導覽', () => {
   const homeNavigation = [
-    ['HOME', '#prototype-hero', 'prototype-hero'],
-    ['DOSSIER', '#adventurer-dossier', 'adventurer-dossier'],
-    ['QUESTS', '#achievements', 'achievements'],
-    ['SKILLS', '#skills', 'skills'],
-    ['PROJECTS', '#projects', 'projects'],
+    ['HOME', '#prototype-hero', 'prototype-hero', /柯均翰/],
+    ['DOSSIER', '#adventurer-dossier', 'adventurer-dossier', 'ADVENTURER DOSSIER'],
+    ['QUESTS', '#achievements', 'achievements', 'QUEST ACHIEVEMENTS'],
+    ['SKILLS', '#skills', 'skills', 'SKILL LOADOUT'],
+    ['PROJECTS', '#projects', 'projects', 'PROJECT SELECT'],
   ]
 
-  for (const [label, hash, sectionId] of homeNavigation) {
+  for (const [label, hash, sectionId, heading] of homeNavigation) {
     test(`${label} 保留啟動連結焦點並定位目標`, async ({ page }) => {
       await page.goto('/')
       const link = page.getByRole('navigation', { name: '頁面導覽' }).getByRole('link', { name: new RegExp(label) })
@@ -101,6 +101,7 @@ test.describe('首頁 hash 導覽', () => {
        await expect(page).toHaveURL(new RegExp(`${hash}$`))
        await expect(page.locator(`#${sectionId}`)).toBeInViewport()
        await expectSectionNearTop(page, sectionId)
+       await expect(page.getByRole('heading', { name: heading })).toBeVisible()
        await expect(link).toBeFocused()
     })
 
@@ -110,6 +111,7 @@ test.describe('首頁 hash 導覽', () => {
        await expect(page.getByRole('heading', { level: 1, name: /柯均翰/ })).toBeVisible()
        await expect(page.locator(`#${sectionId}`)).toBeInViewport()
        await expectSectionNearTop(page, sectionId)
+       await expect(page.getByRole('heading', { name: heading })).toBeVisible()
     })
   }
 })

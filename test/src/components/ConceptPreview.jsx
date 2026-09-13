@@ -10,7 +10,7 @@ const projects = [
 
 function ProjectWall() {
   return (
-    <section id="projects" data-nav-section className="concept-projects" aria-labelledby="prototype-project-heading">
+    <section data-nav-section className="concept-projects" aria-labelledby="prototype-project-heading">
         <div className="concept-section-label">
           <span>05</span>
           <h2 id="prototype-project-heading">PROJECT SELECT</h2>
@@ -51,7 +51,7 @@ function ProjectWall() {
 
 function QuestAchievements() {
   return (
-    <section id="achievements" data-nav-section className="quest-achievements" aria-labelledby="achievements-heading">
+    <section data-nav-section className="quest-achievements" aria-labelledby="achievements-heading">
       <div className="quest-achievements__inner">
         <div className="concept-section-label">
           <span>03</span>
@@ -75,7 +75,7 @@ function QuestAchievements() {
 
 function SkillLoadout() {
   return (
-    <section id="skills" data-nav-section className="skill-loadout" aria-labelledby="skills-heading">
+    <section data-nav-section className="skill-loadout" aria-labelledby="skills-heading">
       <div className="concept-section-label">
         <span>04</span>
         <h2 id="skills-heading">SKILL LOADOUT</h2>
@@ -95,7 +95,7 @@ function SkillLoadout() {
   )
 }
 
-function ScrollChapter({ children }) {
+function ScrollChapter({ id, children }) {
   const ref = useRef(null)
   const [phase, setPhase] = useState('before')
 
@@ -132,7 +132,7 @@ function ScrollChapter({ children }) {
   }, [])
 
   return (
-    <div ref={ref} className={`scroll-chapter is-${phase}`}>
+    <div id={id} ref={ref} className={`scroll-chapter is-${phase}`}>
       <div className="scroll-chapter__pin">
         {children}
       </div>
@@ -252,8 +252,8 @@ function ConceptPreview() {
         </aside>
       </section>
 
-      <ScrollChapter>
-        <section id="adventurer-dossier" data-nav-section className="adventurer-dossier" aria-labelledby="dossier-heading">
+      <ScrollChapter id="adventurer-dossier">
+        <section data-nav-section className="adventurer-dossier" aria-labelledby="dossier-heading">
           <div className="dossier-frame">
             <div className="concept-section-label">
               <span>02</span>
@@ -305,9 +305,9 @@ function ConceptPreview() {
         </section>
       </ScrollChapter>
 
-      <ScrollChapter><QuestAchievements /></ScrollChapter>
-      <ScrollChapter><SkillLoadout /></ScrollChapter>
-      <ScrollChapter><ProjectWall /></ScrollChapter>
+      <ScrollChapter id="achievements"><QuestAchievements /></ScrollChapter>
+      <ScrollChapter id="skills"><SkillLoadout /></ScrollChapter>
+      <ScrollChapter id="projects"><ProjectWall /></ScrollChapter>
       <footer className="concept-footer">
         <span>STYLE PROTOTYPE / NO CONTENT CHANGED</span>
       </footer>
